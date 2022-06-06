@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="5dp"
+    tools:context=".MainActivity">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <EditText
+            android:id="@+id/nameText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:autofillHints=""
+            android:hint="@string/enter_your_name"
+            android:inputType="textAutoComplete"
+            android:textColorHint="#757575" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <Button
+            android:id="@+id/buttonSayHello"
+            android:layout_width="400dp"
+            android:hint="@string/say_hello"
+            android:text="@string/say_hello" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <TextView
+            android:layout_height="50dp"
+            android:id="@+id/textGreeting"
+            android:hint="@string/empty_string"
+            android:textColorHint="#757575" />
+    </TableRow>
+</TableLayout>

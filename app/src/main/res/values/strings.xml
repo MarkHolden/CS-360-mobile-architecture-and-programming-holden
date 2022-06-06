@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Holden Events</string>
+    <string name="empty_string" />
+    <string name="com_auth0_domain">holden-snhu-dev.us.auth0.com</string>
+    <string name="com_auth0_client_id">sRpJlWjcr2yAAYSFIMxn06tFcxW1vLLv</string>
+    <string name="title_activity_login">Login</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="action_create_account">Create account</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Username must be a valid email address.</string>
+    <string name="invalid_password">Password must be 8 or more characters and contain: \na lowercase letter, \na capital letter, \na number, and \na special character.</string>
+    <string name="login_failed">"Login failed."</string>
+    <string name="account_creation_failed">Account creation failed.</string>
+    <string name="expires_at">expiresAt</string>
+    <string name="access_token">accessToken</string>
+    <string name="date_format">EEE LLL dd HH:mm:ss zzz yyyy</string>
+</resources>
