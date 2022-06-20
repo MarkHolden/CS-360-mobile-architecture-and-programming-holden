@@ -40,7 +40,7 @@ captures/
 
 # IntelliJ
 *.iml
-./idea/*
+./idea/**/*.*
 .idea/.gitignore
 .idea/.name
 .idea/compiler.xml

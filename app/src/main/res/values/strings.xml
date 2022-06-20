@@ -17,4 +17,10 @@
     <string name="expires_at">expiresAt</string>
     <string name="access_token">accessToken</string>
     <string name="date_format">EEE LLL dd HH:mm:ss zzz yyyy</string>
+    <string name="human_readable_date_format">yyyy-MM-dd</string>
+    <string name="human_readable_time_format">HH:mm a</string>
+    <string name="start_date_time">Start: %1$s\n\t%2$s</string>
+    <string name="end_date_time">End: %1$s\n\t%2$s</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
