@@ -13,21 +13,12 @@ import java.time.format.DateTimeFormatter;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView textGreeting;
-    private EditText nameText;
     private SharedPreferences encryptedSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Button sayHello = findViewById(R.id.buttonSayHello);
-        sayHello.setOnClickListener(sayHelloClickListener);
-
-        textGreeting = findViewById(R.id.textGreeting);
-
-        nameText = findViewById(R.id.nameText);
 
         SetUpEncryptedSharedPreferences();
 
@@ -43,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         return accessToken != null
                 && expirationString != null
-                && LocalDateTime.now().isBefore(LocalDateTime.parse(expirationString, DateTimeFormatter.ofPattern(getString(R.string.date_format))));
+                && LocalDateTime.now().isBefore(LocalDateTime.parse(expirationString, DateTimeFormatter.ofPattern(getString(R.string.date_format)))); // why do people even use Java...
     }
 
     private void SetUpEncryptedSharedPreferences() {
@@ -59,13 +50,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
-
-    private final View.OnClickListener sayHelloClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-        }
-    };
 }
 
