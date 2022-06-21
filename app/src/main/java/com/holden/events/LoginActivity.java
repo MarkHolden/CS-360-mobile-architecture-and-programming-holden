@@ -2,11 +2,9 @@ package com.holden.events;
 
 import android.app.Activity;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.security.crypto.*;
 
 import android.text.*;
 import android.util.*;
@@ -22,10 +20,7 @@ import com.holden.events.databinding.ActivityLoginBinding;
 import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity {
-
     private AuthenticationAPIClient authClient;
-    private SharedPreferences encryptedSharedPreferences;
-    private SharedPreferences.Editor sharedPreferencesEditor;
     private ProgressBar loadingProgressBar;
     private EditText usernameEditText;
     private TextView usernameError;
@@ -53,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         signupButton = binding.register;
         loadingProgressBar = binding.loading;
 
-        SetUpEncryptedSharedPreferences();
+        encryptedSharedPreferences = new EncryptedSharedPreferencesUtilities(this);
 
         Auth0 auth0 = new Auth0(getString(R.string.com_auth0_client_id), getString(R.string.com_auth0_domain));
         authClient = new AuthenticationAPIClient(auth0);
@@ -124,9 +119,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void SetCredentialsAndCloseActivity(Credentials credentials) {
-        sharedPreferencesEditor.putString("accessToken", credentials.getIdToken());
-        sharedPreferencesEditor.putString("expiresAt", credentials.getExpiresAt().toString());
-        sharedPreferencesEditor.apply();
+        //TODO: remove hack.
+        encryptedSharedPreferences.setCredentials(credentials, role);
         loadingProgressBar.setVisibility(View.GONE);
         setResult(Activity.RESULT_OK);
         finish();
