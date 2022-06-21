@@ -16,6 +16,7 @@
     <string name="account_creation_failed">Account creation failed.</string>
     <string name="expires_at">expiresAt</string>
     <string name="access_token">accessToken</string>
+    <string name="role">role</string>
     <string name="date_format">EEE LLL dd HH:mm:ss zzz yyyy</string>
     <string name="human_readable_date_format">yyyy-MM-dd</string>
     <string name="human_readable_time_format">HH:mm a</string>

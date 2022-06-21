@@ -28,6 +28,12 @@ public class LoginActivity extends AppCompatActivity {
     private TextView passwordError;
     private Button loginButton;
     private Button signupButton;
+    private RadioGroup roleRadioGroup;
+    private RadioButton admin;
+    private RadioButton manager;
+    private RadioButton viewer;
+    private EncryptedSharedPreferencesUtilities encryptedSharedPreferences;
+    private int role;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +54,12 @@ public class LoginActivity extends AppCompatActivity {
         signupButton = binding.register;
         loadingProgressBar = binding.loading;
 
+        //TODO: remove hack.
+        roleRadioGroup = binding.roleRadioGroup;
+        admin = binding.adminButton;
+        manager = binding.editorButton;
+        viewer = binding.viewButton;
+
         encryptedSharedPreferences = new EncryptedSharedPreferencesUtilities(this);
 
         Auth0 auth0 = new Auth0(getString(R.string.com_auth0_client_id), getString(R.string.com_auth0_domain));
@@ -62,28 +74,28 @@ public class LoginActivity extends AppCompatActivity {
             loadingProgressBar.setVisibility(View.VISIBLE);
             SignUp();
         });
-    }
 
-    private void SetUpEncryptedSharedPreferences() {
-        try {
-            encryptedSharedPreferences = EncryptedSharedPreferences.create(
-                    "secret_shared_prefs",
-                    MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC),
-                    this,
-                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-            );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        //TODO: remove hack.
+        roleRadioGroup.setOnCheckedChangeListener((rg, i) -> {
+            switch (i) {
+                case R.id.adminButton:
+                    role = 0;
+                    break;
+                case R.id.editorButton:
+                    role = 1;
+                    break;
+                case R.id.viewButton:
+                    role = 3;
+            }
 
-        sharedPreferencesEditor = encryptedSharedPreferences.edit();
+        });
     }
 
     private void Login() {
         authClient.login(/*usernameEditText.getText().toString()*/"holdenmark33+eventsapp@gmail.com",
             /*passwordEditText.getText().toString()*/"eventsappA1!",
             "Username-Password-Authentication")
+                .setAudience("https://events.holden-events.com")
             .start(new Callback<Credentials, AuthenticationException>() {
                 @Override
                 public void onSuccess(Credentials credentials) {

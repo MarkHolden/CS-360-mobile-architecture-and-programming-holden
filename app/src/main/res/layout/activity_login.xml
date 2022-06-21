@@ -108,4 +108,68 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3" />
 
+    <RadioGroup
+        android:id="@+id/roleRadioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/register">
+
+        <RadioButton
+            android:id="@+id/adminButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Admin"
+            tools:layout_editor_absoluteX="94dp"
+            tools:layout_editor_absoluteY="437dp" />
+
+        <RadioButton
+            android:id="@+id/editorButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Editor"
+            tools:layout_editor_absoluteX="94dp"
+            tools:layout_editor_absoluteY="437dp" />
+
+        <RadioButton
+            android:id="@+id/viewButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Read Only"
+            tools:layout_editor_absoluteX="94dp"
+            tools:layout_editor_absoluteY="437dp" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="243dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Admins can create new events in\naddition to permissions of other roles."
+        app:layout_constraintStart_toEndOf="@+id/roleRadioGroup"
+        app:layout_constraintTop_toTopOf="@+id/roleRadioGroup" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Editors can edit existing events,\nbut not create new ones."
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Read only access to all events."
+        app:layout_constraintStart_toStartOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
