@@ -62,6 +62,11 @@ public class EventListFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         // END_INCLUDE(initializeRecyclerView)
 
+        FloatingActionButton addEventButton = rootView.findViewById(R.id.add_event_fab);
+        encryptedSharedPreferences = new EncryptedSharedPreferencesUtilities(this.getContext());
+        if (encryptedSharedPreferences.canAddEvents())
+            addEventButton.setVisibility(View.VISIBLE);
+
         return rootView;
     }
 
