@@ -1,14 +1,13 @@
 package com.holden.events;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.*;
-
 import android.view.*;
-
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.time.LocalDateTime;
+import java.util.*;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,10 +15,11 @@ import java.time.LocalDateTime;
  * create an instance of this fragment.
  */
 public class EventListFragment extends Fragment {
-    protected Event[] events;
+    protected List<Event> events = new ArrayList<>();
     protected RecyclerView recyclerView;
     protected RecyclerView.LayoutManager layoutManager;
     protected EventListAdapter adapter;
+    private EncryptedSharedPreferencesUtilities encryptedSharedPreferences;
 
     public EventListFragment() {
         // Required empty public constructor
@@ -52,7 +52,12 @@ public class EventListFragment extends Fragment {
 
         setScrollPosition();
 
-        adapter = new EventListAdapter(events);
+        adapter = new EventListAdapter(events, event -> {
+            Intent eventDetailIntent = new Intent(this.getContext(), EventDetailActivity.class);
+            eventDetailIntent.putExtra("event", event);
+            startActivity(eventDetailIntent);
+        });
+
         // Set CustomAdapter as the adapter for RecyclerView.
         recyclerView.setAdapter(adapter);
         // END_INCLUDE(initializeRecyclerView)
@@ -77,15 +82,18 @@ public class EventListFragment extends Fragment {
 
     // TODO: Remove fake data
     private void initDataset() {
-        events = new Event[60];
+        Random random = new Random();
+
         for (int i = 0; i < 60; i++) {
             Event stuff = new Event(getContext());
             stuff.name = "This is event #" + i;
-            stuff.description = "This is event #" + i + "description";
+            stuff.description = "This is event #" + i + " description";
             stuff.startTime = LocalDateTime.now().plusHours(1);
             stuff.endTime = LocalDateTime.now().plusHours(2);
+            stuff.group = stuff.groupsOptions[random.nextInt(stuff.groupsOptions.length)];
+            stuff.location = stuff.locationsOptions[random.nextInt(stuff.locationsOptions.length)];
 
-            events[i] = stuff;
+            events.add(stuff);
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.holden.events;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +8,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> {
-    private Event[] eventList;
+    private List<Event> _eventList;
+    private OnListEventClickListener _listener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -20,16 +20,19 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
             super(itemView);
         }
 
-        public void setTextView(Event event) {
+        public void bind(Event event, OnListEventClickListener listener) {
             ((TextView) itemView.findViewById(R.id.event_list_name)).setText(event.name);
             ((TextView) itemView.findViewById(R.id.event_list_description)).setText(event.description);
-            ((TextView) itemView.findViewById(R.id.event_list_start_time)).setText(event.getStartTimeString());
-            ((TextView) itemView.findViewById(R.id.event_list_end_time)).setText(event.getEndTimeString());
+            ((TextView) itemView.findViewById(R.id.event_list_start_time)).setText(event.getStartDateTimeString());
+            ((TextView) itemView.findViewById(R.id.event_list_end_time)).setText(event.getEndDateTimeString());
+
+            itemView.setOnClickListener(v -> listener.onEventClick(event));
         }
     }
 
-    public EventListAdapter(Event[] events) {
-        eventList = events;
+    public EventListAdapter(List<Event> events, OnListEventClickListener listener) {
+        _eventList = events;
+        _listener = listener;
     }
 
     @NonNull
@@ -37,22 +40,16 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.event_list_item, parent, false);
-        view.setOnClickListener(v -> {
-//            Intent eventEditIntent = new Intent(this, LoginActivity.class);
-//            startActivity(loginIntent);
-//            loadingProgressBar.setVisibility(View.VISIBLE);
-//            Login();
-        });
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        holder.setTextView(eventList[position]);
+        holder.bind(_eventList.get(position), _listener);
     }
 
     @Override
     public int getItemCount() {
-        return eventList.length;
+        return _eventList.size();
     }
 }
