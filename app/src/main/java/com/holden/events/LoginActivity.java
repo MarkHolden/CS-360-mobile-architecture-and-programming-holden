@@ -92,8 +92,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void Login() {
-        authClient.login(/*usernameEditText.getText().toString()*/"holdenmark33+eventsapp@gmail.com",
-            /*passwordEditText.getText().toString()*/"eventsappA1!",
+        authClient.login(usernameEditText.getText().toString(),
+            passwordEditText.getText().toString(),
             "Username-Password-Authentication")
                 .setAudience("https://events.holden-events.com")
             .start(new Callback<Credentials, AuthenticationException>() {
