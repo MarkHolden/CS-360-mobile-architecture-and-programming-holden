@@ -1,5 +1,6 @@
 package com.holden.events;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -27,12 +28,13 @@ public class EventDetailActivity extends AppCompatActivity {
     private TextView eventStartTime;
     private TextView eventEndDate;
     private TextView eventEndTime;
+    private Event event;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Event event = (Event) getIntent().getSerializableExtra("event");
+        event = (Event) getIntent().getSerializableExtra("event");
         boolean isInEditMode = getIntent().getBooleanExtra("isInEditMode", false);
 
         ActivityEventDetailsBinding binding = ActivityEventDetailsBinding.inflate(getLayoutInflater());
@@ -85,12 +87,22 @@ public class EventDetailActivity extends AppCompatActivity {
     }
 
     private void setModelValues() {
+        event.name = eventNameEdit.getText().toString();
+        event.description = eventDescriptionEdit.getText().toString();
+        event.group = eventGroupEdit.getSelectedItem().toString();
+        event.location = eventLocationEdit.getSelectedItem().toString();
+
         eventName.setText(eventNameEdit.getText());
         eventDescription.setText(eventDescriptionEdit.getText());
         eventGroup.setText(eventGroupEdit.getSelectedItem().toString());
         eventLocation.setText(eventLocationEdit.getSelectedItem().toString());
 
         // TODO: start and end times also
+
+        Intent output = new Intent();
+        output.putExtra("event", event);
+        setResult(RESULT_OK, output);
+        finish(); // TODO: not really a fan of just dumping the user back to the list when they save.
     }
 
     private void setEditVisibility() {

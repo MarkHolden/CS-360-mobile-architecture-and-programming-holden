@@ -1,5 +1,6 @@
 package com.holden.events;
 
+import static android.app.Activity.RESULT_OK;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -8,6 +9,7 @@ import android.view.*;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.IntStream;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -15,7 +17,7 @@ import java.util.*;
  * create an instance of this fragment.
  */
 public class EventListFragment extends Fragment {
-    protected List<Event> events = new ArrayList<>();
+    protected List<Event> _eventList = new ArrayList<>();
     protected RecyclerView recyclerView;
     protected RecyclerView.LayoutManager layoutManager;
     protected EventListAdapter adapter;
@@ -52,10 +54,11 @@ public class EventListFragment extends Fragment {
 
         setScrollPosition();
 
-        adapter = new EventListAdapter(events, event -> {
+        adapter = new EventListAdapter(_eventList, event -> {
             Intent eventDetailIntent = new Intent(this.getContext(), EventDetailActivity.class);
             eventDetailIntent.putExtra("event", event);
-            startActivity(eventDetailIntent);
+            //noinspection deprecation (the non-deprecated way is immensely complex and high risk).
+            startActivityForResult(eventDetailIntent, 2);
         });
 
         // Set CustomAdapter as the adapter for RecyclerView.
@@ -68,6 +71,14 @@ public class EventListFragment extends Fragment {
             addEventButton.setVisibility(View.VISIBLE);
 
         return rootView;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 2 && resultCode == RESULT_OK && data != null) {
+            Event event = (Event) data.getSerializableExtra("event");
+            UpdateEvent(event);
+        }
     }
 
     /**
@@ -85,11 +96,32 @@ public class EventListFragment extends Fragment {
         recyclerView.scrollToPosition(scrollPosition);
     }
 
+    public void UpdateEvent(Event event) {
+        _eventList.stream()
+            .filter(e -> e.id.equals(event.id))
+            .forEach(e -> {
+                e.name = event.name;
+                e.description = event.description;
+                e.startTime = event.startTime;
+                e.endTime = event.endTime;
+                e.group = event.group;
+                e.location = event.location;
+            });
+
+        OptionalInt position = IntStream.range(0, _eventList.size())
+                .filter(i -> _eventList.get(i).id.equals(event.id))
+                .findFirst();
+
+        if (position.isPresent())
+            recyclerView.getAdapter().notifyItemChanged(position.getAsInt());
+    }
+
+
     // TODO: Remove fake data
     private void initDataset() {
         Random random = new Random();
 
-        for (int i = 0; i < 60; i++) {
+        for (int i = 0; i < 4; i++) {
             Event stuff = new Event(getContext());
             stuff.name = "This is event #" + i;
             stuff.description = "This is event #" + i + " description";
@@ -98,7 +130,7 @@ public class EventListFragment extends Fragment {
             stuff.group = stuff.groupsOptions[random.nextInt(stuff.groupsOptions.length)];
             stuff.location = stuff.locationsOptions[random.nextInt(stuff.locationsOptions.length)];
 
-            events.add(stuff);
+            _eventList.add(stuff);
         }
     }
 }
