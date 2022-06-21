@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.*;
 import android.view.*;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -17,10 +16,11 @@ import java.util.stream.IntStream;
  * create an instance of this fragment.
  */
 public class EventListFragment extends Fragment {
-    protected List<Event> _eventList = new ArrayList<>();
+    protected List<Event> _eventList;
     protected RecyclerView recyclerView;
     protected RecyclerView.LayoutManager layoutManager;
     protected EventListAdapter adapter;
+    private EventRepository eventRepo;
 
     public EventListFragment() {
         // Required empty public constructor
@@ -33,7 +33,9 @@ public class EventListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initDataset();
+        eventRepo = new EventRepository(this.getContext());
+//        eventRepo.seed();
+        _eventList = eventRepo.list();
     }
 
     @Override
@@ -117,11 +119,13 @@ public class EventListFragment extends Fragment {
     }
 
     public void addEvent(Event event) {
+        eventRepo.create(event);
         _eventList.add(event);
         recyclerView.getAdapter().notifyItemChanged(_eventList.size());
     }
 
     private void updateEvent(Event event, int position) {
+        eventRepo.update(event);
         _eventList.stream()
             .filter(e -> e.id.equals(event.id))
             .forEach(e -> {
@@ -134,23 +138,5 @@ public class EventListFragment extends Fragment {
             });
 
         recyclerView.getAdapter().notifyItemChanged(position);
-    }
-
-
-    // TODO: Remove fake data
-    private void initDataset() {
-        Random random = new Random();
-
-        for (int i = 0; i < 4; i++) {
-            Event stuff = new Event(getContext());
-            stuff.name = "This is event #" + i;
-            stuff.description = "This is event #" + i + " description";
-            stuff.startTime = LocalDateTime.now().plusHours(1);
-            stuff.endTime = LocalDateTime.now().plusHours(2);
-            stuff.group = stuff.groupsOptions[random.nextInt(stuff.groupsOptions.length)];
-            stuff.location = stuff.locationsOptions[random.nextInt(stuff.locationsOptions.length)];
-
-            _eventList.add(stuff);
-        }
     }
 }
