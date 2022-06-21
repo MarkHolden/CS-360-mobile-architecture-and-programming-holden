@@ -21,7 +21,6 @@ public class EventListFragment extends Fragment {
     protected RecyclerView recyclerView;
     protected RecyclerView.LayoutManager layoutManager;
     protected EventListAdapter adapter;
-    private EncryptedSharedPreferencesUtilities encryptedSharedPreferences;
 
     public EventListFragment() {
         // Required empty public constructor
@@ -66,9 +65,16 @@ public class EventListFragment extends Fragment {
         // END_INCLUDE(initializeRecyclerView)
 
         FloatingActionButton addEventButton = rootView.findViewById(R.id.add_event_fab);
-        encryptedSharedPreferences = new EncryptedSharedPreferencesUtilities(this.getContext());
-        if (encryptedSharedPreferences.canAddEvents())
+        EncryptedSharedPreferencesUtilities encryptedSharedPreferences = new EncryptedSharedPreferencesUtilities(this.getContext());
+        if (encryptedSharedPreferences.canAddEvents()) {
             addEventButton.setVisibility(View.VISIBLE);
+            addEventButton.setOnClickListener(v -> {
+                Intent eventDetailIntent = new Intent(v.getContext(), EventDetailActivity.class);
+                eventDetailIntent.putExtra("isInEditMode", true);
+                //noinspection deprecation (the non-deprecated way is immensely complex and high risk).
+                startActivityForResult(eventDetailIntent, 2);
+            });
+        }
 
         return rootView;
     }
@@ -77,7 +83,7 @@ public class EventListFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 2 && resultCode == RESULT_OK && data != null) {
             Event event = (Event) data.getSerializableExtra("event");
-            UpdateEvent(event);
+            upsertEvent(event);
         }
     }
 
@@ -96,7 +102,26 @@ public class EventListFragment extends Fragment {
         recyclerView.scrollToPosition(scrollPosition);
     }
 
-    public void UpdateEvent(Event event) {
+    private void upsertEvent(Event event) {
+        OptionalInt position = IntStream.range(0, _eventList.size())
+                .filter(i -> _eventList.get(i).id.equals(event.id))
+                .findFirst();
+
+        if (position.isPresent())
+        {
+            updateEvent(event, position.getAsInt());
+            return;
+        }
+
+        addEvent(event);
+    }
+
+    public void addEvent(Event event) {
+        _eventList.add(event);
+        recyclerView.getAdapter().notifyItemChanged(_eventList.size());
+    }
+
+    private void updateEvent(Event event, int position) {
         _eventList.stream()
             .filter(e -> e.id.equals(event.id))
             .forEach(e -> {
@@ -108,12 +133,7 @@ public class EventListFragment extends Fragment {
                 e.location = event.location;
             });
 
-        OptionalInt position = IntStream.range(0, _eventList.size())
-                .filter(i -> _eventList.get(i).id.equals(event.id))
-                .findFirst();
-
-        if (position.isPresent())
-            recyclerView.getAdapter().notifyItemChanged(position.getAsInt());
+        recyclerView.getAdapter().notifyItemChanged(position);
     }
 
 

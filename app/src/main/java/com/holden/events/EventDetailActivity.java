@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.holden.events.databinding.ActivityEventDetailsBinding;
 
 public class EventDetailActivity extends AppCompatActivity {
-    private EncryptedSharedPreferencesUtilities _encryptedSharedPreferences;
     private ImageButton edit;
     private ImageButton save;
     private TextView eventName;
@@ -35,20 +34,22 @@ public class EventDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         event = (Event) getIntent().getSerializableExtra("event");
+        if (event == null)
+            event = new Event(this);
+
         boolean isInEditMode = getIntent().getBooleanExtra("isInEditMode", false);
 
         ActivityEventDetailsBinding binding = ActivityEventDetailsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         edit = binding.edit;
-        _encryptedSharedPreferences = new EncryptedSharedPreferencesUtilities(this);
-        edit.setVisibility((!isInEditMode && _encryptedSharedPreferences.canEditEvents()) ? View.VISIBLE : View.INVISIBLE);
+        EncryptedSharedPreferencesUtilities encryptedSharedPreferences = new EncryptedSharedPreferencesUtilities(this);
+        edit.setVisibility((!isInEditMode && encryptedSharedPreferences.canEditEvents()) ? View.VISIBLE : View.INVISIBLE);
 
         edit.setOnClickListener(v -> setEditVisibility());
 
         save = binding.save;
         save.setOnClickListener(v -> {
-            // TODO: actually save the event.
             setSaveVisibility();
             setModelValues();
         });
@@ -84,6 +85,9 @@ public class EventDetailActivity extends AppCompatActivity {
 
         eventEndTime = binding.eventDetailEndTime;
         eventEndTime.setText(event.getEndTimeString());
+
+        if (isInEditMode)
+            setEditVisibility();
     }
 
     private void setModelValues() {

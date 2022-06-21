@@ -28,6 +28,8 @@ public class Event implements Serializable {
         _context = context;
         _dateFormatter = DateTimeFormatter.ofPattern(context.getString(R.string.human_readable_date_format));
         _timeFormatter = DateTimeFormatter.ofPattern(context.getString(R.string.human_readable_time_format));
+        startTime = LocalDateTime.now();
+        endTime = startTime;
     }
 
     public String getStartDateTimeString() {
