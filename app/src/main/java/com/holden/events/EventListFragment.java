@@ -127,8 +127,8 @@ public class EventListFragment extends Fragment {
             .forEach(e -> {
                 e.name = event.name;
                 e.description = event.description;
-                e.startTime = event.startTime;
-                e.endTime = event.endTime;
+                e.startDateTime = event.startDateTime;
+                e.endDateTime = event.endDateTime;
                 e.group = event.group;
                 e.location = event.location;
             });

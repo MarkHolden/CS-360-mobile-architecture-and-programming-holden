@@ -11,8 +11,8 @@ public class Event implements Serializable {
     public UUID id;
     public String name;
     public String description;
-    public LocalDateTime startTime;
-    public LocalDateTime endTime;
+    public LocalDateTime startDateTime;
+    public LocalDateTime endDateTime;
     public String group;
     public String location;
     public String[] groupsOptions = { "The Mars Society", "Piping Plover Convention", "WWDC - World Wrestling Developer Conference" };
@@ -28,31 +28,31 @@ public class Event implements Serializable {
         _context = context;
         _dateFormatter = DateTimeFormatter.ofPattern(context.getString(R.string.human_readable_date_format));
         _timeFormatter = DateTimeFormatter.ofPattern(context.getString(R.string.human_readable_time_format));
-        startTime = LocalDateTime.now();
-        endTime = startTime;
+        startDateTime = LocalDateTime.now();
+        endDateTime = startDateTime;
     }
 
     public String getStartDateTimeString() {
-        return _context.getString(R.string.start_date_time, startTime.format(_dateFormatter), startTime.format(_timeFormatter));
+        return _context.getString(R.string.start_date_time, startDateTime.format(_dateFormatter), startDateTime.format(_timeFormatter));
     }
 
     public String getEndDateTimeString() {
-        return _context.getString(R.string.end_date_time, endTime.format(_dateFormatter), endTime.format(_timeFormatter));
+        return _context.getString(R.string.end_date_time, endDateTime.format(_dateFormatter), endDateTime.format(_timeFormatter));
     }
 
     public String getStartTimeString() {
-        return startTime.format(_timeFormatter);
+        return startDateTime.format(_timeFormatter);
     }
 
     public String getEndTimeString() {
-        return endTime.format(_timeFormatter);
+        return endDateTime.format(_timeFormatter);
     }
 
     public String getStartDateString() {
-        return startTime.format(_dateFormatter);
+        return startDateTime.format(_dateFormatter);
     }
 
     public String getEndDateString() {
-        return endTime.format(_dateFormatter);
+        return endDateTime.format(_dateFormatter);
     }
 }
